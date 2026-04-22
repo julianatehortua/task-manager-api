@@ -74,8 +74,7 @@ public class TaskService : ITaskService
             AssignedUserName = assignedUser?.Name
         };
     }
-
-    public async Task<TaskResponseDto> UpdateStatusAsync(int taskId, UpdateTaskStatusDto dto, int userId)
+    public async Task<TaskResponseDto> UpdateAsync(int taskId, UpdateTaskDto dto, int userId)
     {
         var task = await _context.Tasks
             .Include(t => t.Project)
@@ -83,6 +82,8 @@ public class TaskService : ITaskService
             .FirstOrDefaultAsync(t => t.Id == taskId && t.Project.OwnerId == userId)
             ?? throw new Exception("Tarea no encontrada.");
 
+        task.Title = dto.Title;
+        task.Description = dto.Description;
         task.Status = dto.Status;
         await _context.SaveChangesAsync();
 
@@ -96,7 +97,7 @@ public class TaskService : ITaskService
             ProjectId = task.ProjectId,
             AssignedUserName = task.AssignedUser?.Name
         };
-    }
+    }   
 
     public async Task DeleteAsync(int taskId, int userId)
     {

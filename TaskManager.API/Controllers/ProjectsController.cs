@@ -41,6 +41,19 @@ public class ProjectsController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, UpdateProjectDto dto)
+    {
+        try
+        {
+            var result = await _projectService.UpdateAsync(id, dto, GetUserId());
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)

@@ -46,7 +46,7 @@ public class AppDbContext : DbContext
             e.HasOne(t => t.AssignedUser)
              .WithMany(u => u.AssignedTasks)
              .HasForeignKey(t => t.AssignedUserId)
-             .OnDelete(DeleteBehavior.NoAction); // ← esto cambia
+             .OnDelete(DeleteBehavior.NoAction);
         });
     }
 }

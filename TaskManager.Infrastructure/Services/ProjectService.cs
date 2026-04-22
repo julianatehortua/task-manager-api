@@ -18,6 +18,7 @@ public class ProjectService : IProjectService
     {
         _context = context;
     }
+      
 
     public async Task<List<ProjectResponseDto>> GetAllAsync(int userId)
     {
@@ -55,7 +56,27 @@ public class ProjectService : IProjectService
             TaskCount = 0
         };
     }
+    public async Task<ProjectResponseDto> UpdateAsync(int id, UpdateProjectDto dto, int userId)
+    {
+        var project = await _context.Projects
+            .Include(p => p.Tasks)
+            .FirstOrDefaultAsync(p => p.Id == id && p.OwnerId == userId)
+            ?? throw new Exception("Proyecto no encontrado.");
 
+        if (dto.Name != null) project.Name = dto.Name;
+        if (dto.Description != null) project.Description = dto.Description;
+
+        await _context.SaveChangesAsync();
+
+        return new ProjectResponseDto
+        {
+            Id = project.Id,
+            Name = project.Name,
+            Description = project.Description,
+            CreatedAt = project.CreatedAt,
+            TaskCount = project.Tasks.Count
+        };
+    }
     public async Task DeleteAsync(int id, int userId)
     {
         var project = await _context.Projects

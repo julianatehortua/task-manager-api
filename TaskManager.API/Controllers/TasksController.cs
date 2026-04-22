@@ -50,11 +50,11 @@ public class TasksController : ControllerBase
     }
 
     [HttpPatch("{taskId}/status")]
-    public async Task<IActionResult> UpdateStatus(int taskId, UpdateTaskStatusDto dto)
+    public async Task<IActionResult> UpdateStatus(int taskId, UpdateTaskDto dto)
     {
         try
         {
-            var result = await _taskService.UpdateStatusAsync(taskId, dto, GetUserId());
+            var result = await _taskService.UpdateAsync(taskId, dto, GetUserId());
             return Ok(result);
         }
         catch (Exception ex)
